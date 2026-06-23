@@ -1,0 +1,833 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    max-width: 960px;
+    /* Minimum core width so dense tables (e.g. Tier Distribution) aren't
+       cramped on mobile; on phones the page scrolls horizontally to this. */
+    min-width: 640px;
+    margin: 0 auto;
+    padding: 16px;
+    color: #333;
+    background: #fafafa;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+/* App header with version stamp */
+header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.version {
+    font-size: 0.7em;
+    color: #999;
+    font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Loading screen */
+#loading-screen {
+    text-align: center;
+    padding-top: 20vh;
+}
+
+/* Spinner */
+.spinner {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border: 3px solid #ddd;
+    border-top-color: #333;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Status badges */
+.status {
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.status.valid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.invalid {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Error messages */
+.error-msg {
+    color: #dc3545;
+    margin-top: 4px;
+    white-space: pre-wrap;
+    font-size: 0.9em;
+}
+
+/* Textareas */
+textarea {
+    width: 100%;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13px;
+    tab-size: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+/* Sections */
+section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+}
+
+/* Editor controls */
+.editor-controls {
+    margin-bottom: 8px;
+}
+
+.editor-controls button,
+.result-controls button,
+.run-group button {
+    padding: 6px 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    margin-right: 6px;
+    margin-bottom: 4px;
+}
+
+.editor-controls button:hover,
+.result-controls button:hover,
+.run-group button:hover {
+    background: #f0f0f0;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Run controls */
+.run-group {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 32px;
+    margin-bottom: 8px;
+}
+
+.run-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+}
+
+.run-group input[type="number"] {
+    width: 100px;
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 8px 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    text-align: right;
+}
+
+th {
+    background: #f5f5f5;
+}
+
+td:first-child, th:first-child {
+    text-align: left;
+}
+
+/* Bracket Path / Bracket Odds tables */
+.bp-top {
+    background: #e6f4ea;     /* top bracket highlight */
+    font-weight: 600;
+}
+
+.select-row {
+    margin: 8px 0;
+    font-size: 0.9em;
+}
+
+.select-row select {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-left: 4px;
+}
+
+.bp-size {
+    font-size: 0.72em;
+    color: #999;
+    font-weight: normal;
+}
+
+/* Grouped two-row header (event Copper table) */
+.copper-grouped th.group {
+    text-align: center;
+}
+
+.copper-grouped tr:nth-child(2) th {
+    text-align: right;   /* sub-header row aligns with its numeric columns */
+}
+
+/* Event accordion */
+details {
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+summary h3 {
+    display: inline;
+}
+
+.battle-detail {
+    margin: 8px 0;
+    padding: 8px;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.probs {
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Charts */
+#chart-section canvas {
+    max-height: 400px;
+    margin-bottom: 16px;
+}
+
+/* Result controls */
+.result-controls {
+    margin-bottom: 12px;
+}
+
+/* Model form sections */
+.model-section {
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 0;
+}
+
+.model-section > summary {
+    padding: 10px 12px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.model-section[open] > summary {
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 4px 4px 0 0;
+}
+
+.model-section > :not(summary) {
+    padding: 12px;
+}
+
+/* Form grid for inline controls */
+.form-grid {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 12px;
+}
+
+.form-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.form-grid select,
+.form-grid input[type="number"] {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+/* Form tables */
+.form-table {
+    width: 100%;
+    margin: 0;
+}
+
+.form-table select {
+    width: 100%;
+    padding: 3px 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+/* Percentage inputs in outcome matrix */
+.pct-input {
+    width: 80px;
+    padding: 3px 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 13px;
+    text-align: right;
+}
+
+/* Add/remove row buttons */
+.add-row-btn {
+    margin: 8px 12px;
+    padding: 4px 12px;
+    border: 1px dashed #aaa;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    color: #555;
+    font-size: 0.85em;
+}
+
+.add-row-btn:hover {
+    background: #f0f0f0;
+    border-color: #888;
+}
+
+.remove-row-btn {
+    border: none;
+    background: transparent;
+    color: #999;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 2px 6px;
+}
+
+.remove-row-btn:hover {
+    color: #dc3545;
+}
+
+/* Event subsections within accordion panels */
+.event-subsection,
+.day-subsection {
+    margin-bottom: 12px;
+    padding: 0 12px 12px;
+}
+
+.event-subsection h4,
+.day-subsection h4 {
+    margin: 8px 0;
+    font-size: 0.95em;
+    color: #555;
+}
+
+/* Heuristic coefficient editor */
+.heur-day {
+    margin-bottom: 12px;
+    padding: 0 12px;
+}
+
+.heur-day h4 {
+    margin: 8px 0;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.heur-preview {
+    margin: 6px 0 0;
+    padding: 6px 8px;
+    background: #f6f6f6;
+    border-radius: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Help text */
+.help-text {
+    font-size: 0.85em;
+    color: #888;
+    margin: 4px 12px 8px;
+}
+
+.muted {
+    color: #999;
+    font-style: italic;
+    padding: 12px;
+}
+
+/* View toggle button */
+.toggle-btn {
+    font-weight: 500;
+}
+
+/* Validation highlight on outcome rows */
+.validation-error {
+    background: #fff3f3;
+}
+
+.validation-error .pct-input {
+    border-color: #dc3545;
+}
+
+.validation-inline {
+    color: #dc3545;
+    font-size: 0.85em;
+    margin: 4px 12px;
+}
+
+.validation-error input,
+.validation-error select {
+    border-color: #dc3545;
+}
+
+/* Result filter */
+.result-filter {
+    margin: 8px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.result-filter span {
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.filter-btn {
+    padding: 4px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.85em;
+}
+
+.filter-btn.active {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.filter-btn:hover:not(.active) {
+    background: #f0f0f0;
+}
+
+/* Rank change indicators */
+.rank-up {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.rank-down {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.rank-same {
+    color: #999;
+    font-size: 0.8em;
+}
+
+/* State JSON toggle */
+#state-json-toggle {
+    margin-top: 8px;
+}
+
+#state-json-toggle summary {
+    cursor: pointer;
+    color: #555;
+    font-size: 0.9em;
+}
+
+/* Notifications */
+.notification {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    z-index: 1000;
+    animation: fadeInOut 3s ease;
+    /* Cap width so a right-anchored toast can't push out the layout
+       viewport (which makes iOS Safari zoom the whole page out). */
+    max-width: calc(100vw - 32px);
+}
+
+.notification-info {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.notification-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Quick-start guide */
+.quick-start {
+    background: #f0f7ff;
+    border: 1px solid #cce0ff;
+    border-radius: 6px;
+    padding: 4px 16px;
+    margin-bottom: 20px;
+}
+
+.quick-start summary {
+    font-weight: 600;
+    font-size: 1.1em;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.quick-start ol {
+    margin: 8px 0;
+    padding-left: 24px;
+}
+
+.quick-start li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+/* Key sections highlight */
+.model-section.key-section > summary {
+    border-left: 3px solid #4a90d9;
+    padding-left: 10px;
+}
+
+/* Advanced settings wrapper */
+.advanced-settings {
+    background: #fafafa;
+}
+
+.advanced-settings > summary {
+    color: #666;
+    font-size: 0.95em;
+}
+
+.advanced-settings > .model-section {
+    border-color: #e8e8e8;
+    margin: 8px 12px;
+}
+
+/* Deep-dive collapsible blocks */
+.deep-dive {
+    margin: 12px 12px 8px;
+    padding: 0 12px;
+    border-left: 3px solid #ddd;
+    border: none;
+}
+
+.deep-dive summary {
+    font-size: 0.9em;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.deep-dive ol,
+.deep-dive ul {
+    margin: 8px 0;
+    padding-left: 20px;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.noise-note {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* Tier optimization conditional fields */
+#maximize-tier-options {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 4px 0;
+}
+
+#maximize-tier-options label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+#maximize-tier-options select,
+#maximize-tier-options input[type="number"] {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+/* Performance warning for maximize_tier + MC */
+.tier-warning {
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: #fff8e1;
+    border-left: 3px solid #e6a817;
+    font-size: 0.85em;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 32px 16px;
+    overflow-y: auto;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 900px;
+    width: 100%;
+    position: relative;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #666;
+    padding: 4px 8px;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 0.9em;
+}
+
+.modal-nav button {
+    padding: 4px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.modal-nav button:hover:not(:disabled) {
+    background: #f0f0f0;
+}
+
+.modal-nav button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Clickable tier distribution cells */
+.tier-cell-clickable {
+    cursor: pointer;
+    position: relative;
+}
+
+.tier-cell-clickable:hover {
+    background: #e8f0fe;
+}
+
+.bracket-cell-clickable {
+    cursor: pointer;
+}
+
+.bracket-cell-clickable:hover {
+    background: #e8f0fe;
+}
+
+/* Multi-attacker linked rows in outcome tables */
+.bom-linked-row td {
+    border-top: none;
+    background: #f4f8fc;
+}
+
+.bom-linked-cell {
+    padding-left: 22px;
+    white-space: nowrap;
+}
+
+.bom-linked-note {
+    color: #888;
+    font-style: italic;
+    font-size: 0.85em;
+}
+
+/* Cell action menu (example run / filter) */
+.cell-menu {
+    position: absolute;
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+}
+
+.cell-menu button {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.cell-menu button:hover {
+    background: #e8f0fe;
+}
+
+/* MC conditional-filter banner */
+.mc-filter-banner {
+    background: #e8f0fe;
+    border: 1px solid #b3c7e6;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+}
+
+.mc-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid #b3c7e6;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-weight: 600;
+}
+
+.mc-chip-remove {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0 2px;
+    font-size: 1em;
+    line-height: 1;
+    color: #666;
+}
+
+.mc-chip-remove:hover {
+    color: #dc3545;
+}
+
+.mc-filter-warn {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+#mc-filter-clear {
+    margin-left: 8px;
+    padding: 2px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .run-group {
+        display: block;
+        margin-right: 0;
+    }
+}
+
+/* On narrow screens, let wide tables scroll inside their own box instead of
+   stretching the page. The core width (body min-width) fits the Tier
+   Distribution table, so it doesn't scroll and stays screenshottable; only
+   wider tables (Copper Statistics, the grouped Copper table) scroll. */
+@media (max-width: 768px) {
+    table:not(.form-table):not(.card-table) {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+    }
+
+    /* Wide model-form input tables scroll within their section. */
+    .day-subsection,
+    .event-subsection {
+        overflow-x: auto;
+    }
+}

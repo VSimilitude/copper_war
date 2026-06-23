@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copper War Simulator</title>
+    <link rel="stylesheet" href="css/style.css?v=4f83cd3">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.27.4/full/pyodide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div id="loading-screen">
+        <h1>Copper War Simulator</h1>
+        <div class="spinner"></div>
+        <p id="loading-status">Loading Python runtime...</p>
+    </div>
+
+    <div id="app" class="hidden">
+        <header>
+            <h1>Copper War Simulator</h1>
+            <span id="app-version" class="version" title="Build version">4f83cd3 (2026-06-23 12:40Z)</span>
+        </header>
+
+        <main>
+            <!-- Quick-Start Guide -->
+            <details id="quick-start" class="quick-start" open>
+                <summary>How to Use This Tool</summary>
+                <ol>
+                    <li><strong>Set targeting strategies</strong> — In
+                        <strong>Event Targets</strong>, choose who each alliance attacks.
+                        Pin specific targets per event, or let an algorithm pick via
+                        <strong>General Settings</strong>.</li>
+                    <li><strong>Set battle outcome probabilities</strong> — In the
+                        <strong>Battle Outcomes</strong>, enter the chance of full
+                        and partial success for key matchups. Leave blank to use the
+                        power-ratio heuristic.</li>
+                    <li><strong>Run</strong> — Click <em>Run</em> for a single
+                        deterministic result, or <em>Run Monte Carlo</em> for a
+                        statistical distribution across many iterations.</li>
+                </ol>
+                <p class="help-text">The default state is pre-loaded. You only need to
+                    configure the <strong>Model Config</strong> section — targeting and
+                    outcomes — then hit Run.</p>
+            </details>
+
+            <!-- State Editor -->
+            <section id="state-editor">
+                <h2>Game State <span id="state-status" class="status"></span></h2>
+                <div class="editor-controls">
+                    <button id="state-upload-btn">Upload JSON</button>
+                    <input type="file" id="state-file-input" accept=".json" class="hidden">
+                </div>
+                <div id="state-error" class="error-msg hidden"></div>
+                <div id="state-summary" class="hidden"></div>
+                <details id="state-json-toggle">
+                    <summary>Edit JSON</summary>
+                    <textarea id="state-textarea" rows="20" spellcheck="false"></textarea>
+                </details>
+            </section>
+
+            <!-- Model Editor -->
+            <section id="model-editor">
+                <h2>Model Config <span id="model-status" class="status"></span></h2>
+                <div class="editor-controls">
+                    <button id="model-upload-btn">Upload JSON</button>
+                    <input type="file" id="model-file-input" accept=".json" class="hidden">
+                    <button id="csv-import-btn">Import CSV</button>
+                    <input type="file" id="csv-file-input" accept=".csv" class="hidden">
+                    <button id="csv-template-btn">Download CSV Template</button>
+                    <button id="model-view-toggle" class="toggle-btn">Edit as JSON</button>
+                    <button id="download-model-btn">Download Model JSON</button>
+                    <button id="share-btn">Copy Model Link</button>
+                </div>
+                <div id="model-error" class="error-msg hidden"></div>
+
+                <!-- Form view (default) -->
+                <div id="model-form"></div>
+
+                <!-- JSON view (hidden) -->
+                <div id="model-json-view" class="hidden">
+                    <textarea id="model-textarea" rows="20" spellcheck="false"></textarea>
+                </div>
+            </section>
+
+            <!-- Run Controls -->
+            <section id="run-controls">
+                <h2>Run Simulation</h2>
+                <p class="help-text"><strong>Single Run</strong> — one simulation with a
+                    fixed seed (leave blank for random). Useful for inspecting a specific
+                    scenario event-by-event.<br>
+                    <strong>Monte Carlo</strong> — runs many iterations with randomized
+                    targeting and outcomes. Shows tier probabilities and copper distributions.
+                    1000 iterations is a good default.</p>
+                <div class="run-group">
+                    <h3>Single Run</h3>
+                    <label>Seed: <input type="number" id="single-seed" placeholder="auto"></label>
+                    <button id="run-single-btn" disabled>Run</button>
+                </div>
+                <div class="run-group">
+                    <h3>Monte Carlo</h3>
+                    <label>Iterations: <input type="number" id="mc-iterations" value="1000" min="1"></label>
+                    <label>Base seed: <input type="number" id="mc-base-seed" value="0" min="0"></label>
+                    <button id="run-mc-btn" disabled>Run Monte Carlo</button>
+                </div>
+                <div id="mc-tier-warning" class="tier-warning hidden">
+                    <strong>Note:</strong> <code>maximize_tier</code> runs forward
+                    simulations for each targeting decision, which increases Monte Carlo
+                    run time significantly. Consider using <code>rank_aware</code> for
+                    faster results, or reducing iterations.
+                </div>
+                <div id="run-spinner" class="spinner hidden"></div>
+            </section>
+
+            <!-- Results -->
+            <section id="results" class="hidden">
+                <h2>Results</h2>
+                <div class="result-controls">
+                    <button id="download-results-btn">Download Results JSON</button>
+                </div>
+                <div id="result-filter" class="result-filter hidden">
+                    <span>Filter:</span>
+                    <button class="filter-btn" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="top3">Top 3 per faction</button>
+                    <button class="filter-btn" data-filter="top5">Top 5 per faction</button>
+                    <button class="filter-btn active" data-filter="top10">Top 10 per faction</button>
+                </div>
+                <div id="results-content"></div>
+            </section>
+        </main>
+    </div>
+
+    <script>window.BUILD_SHA = "4f83cd3";</script>
+    <script src="js/pyodide-loader.js?v=4f83cd3"></script>
+    <script src="js/app.js?v=4f83cd3"></script>
+</body>
+</html>
