@@ -94,19 +94,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("loading-screen").classList.add("hidden");
     document.getElementById("app").classList.remove("hidden");
 
-    // Load default state
-    const defaultState = PyBridge.getDefaultState();
-    document.getElementById("state-textarea").value = JSON.stringify(defaultState, null, 2);
-    validateState();
+    // Populate the snapshot selector, then load the default state + its model.
+    populateStateSelector();
+    loadStateIntoEditor(PyBridge.getDefaultState());
 
-    // Load default model — populate both form and textarea
-    const defaultModel = PyBridge.getDefaultModelConfig(defaultState);
-    modelFormData = defaultModel;
-    document.getElementById("model-textarea").value = JSON.stringify(defaultModel, null, 2);
-    buildModelForm();
-    validateModel();
-
-    updateRunButtons();
     setupEventHandlers();
 
     // Quick-start guide: remember collapse state
@@ -158,6 +149,56 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 });
+
+// --- Snapshot Selector ---
+
+// Load a state dict into the editor and reset the model to that state's default,
+// mirroring the initial page-load sequence. Used by both init and the selector.
+function loadStateIntoEditor(state) {
+    document.getElementById("state-textarea").value = JSON.stringify(state, null, 2);
+    validateState();
+
+    const model = PyBridge.getDefaultModelConfig(state);
+    modelFormData = model;
+    document.getElementById("model-textarea").value = JSON.stringify(model, null, 2);
+    buildModelForm();
+    validateModel();
+
+    updateRunButtons();
+}
+
+// Fill the snapshot dropdown from the bundled manifest (newest first) and wire
+// switching. Each option loads a packaged historical state via the bridge.
+function populateStateSelector() {
+    const sel = document.getElementById("state-select");
+    if (!sel) return;
+
+    const manifest = PyBridge.listStates();
+    if (!manifest || manifest.ok === false || !Array.isArray(manifest.states)) {
+        // Bridge unavailable / old bundle — hide the control, keep the default.
+        sel.closest(".select-label")?.classList.add("hidden");
+        return;
+    }
+
+    sel.innerHTML = "";
+    for (const s of [...manifest.states].reverse()) {
+        const opt = document.createElement("option");
+        opt.value = s.id;
+        opt.textContent = s.id === manifest.default ? `${s.label} — current default` : s.label;
+        if (s.id === manifest.default) opt.selected = true;
+        sel.appendChild(opt);
+    }
+
+    sel.addEventListener("change", () => {
+        const state = PyBridge.getState(sel.value);
+        if (!state || state.ok === false) {
+            showNotification("Failed to load snapshot");
+            return;
+        }
+        loadStateIntoEditor(state);
+        showNotification(`Loaded ${sel.options[sel.selectedIndex].textContent}`);
+    });
+}
 
 // --- State Validation ---
 

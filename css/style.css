@@ -109,6 +109,20 @@ section {
     margin-bottom: 8px;
 }
 
+.editor-controls .select-label {
+    font-size: 0.9em;
+    margin-right: 10px;
+}
+
+.editor-controls .select-label select {
+    margin-left: 4px;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+
 .editor-controls button,
 .result-controls button,
 .run-group button {

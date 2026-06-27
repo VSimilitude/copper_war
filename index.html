@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Copper War Simulator</title>
-    <link rel="stylesheet" href="css/style.css?v=25e4c1b">
+    <link rel="stylesheet" href="css/style.css?v=9f78c2e">
     <script src="https://cdn.jsdelivr.net/pyodide/v0.27.4/full/pyodide.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
@@ -18,7 +18,7 @@
     <div id="app" class="hidden">
         <header>
             <h1>Copper War Simulator</h1>
-            <span id="app-version" class="version" title="Build version">25e4c1b (2026-06-27 16:41Z)</span>
+            <span id="app-version" class="version" title="Build version">9f78c2e (2026-06-27 17:23Z)</span>
         </header>
 
         <main>
@@ -47,6 +47,9 @@
             <section id="state-editor">
                 <h2>Game State <span id="state-status" class="status"></span></h2>
                 <div class="editor-controls">
+                    <label for="state-select" class="select-label">Load snapshot:
+                        <select id="state-select" title="Switch between season snapshots"></select>
+                    </label>
                     <button id="state-upload-btn">Upload JSON</button>
                     <input type="file" id="state-file-input" accept=".json" class="hidden">
                 </div>
@@ -129,8 +132,8 @@
         </main>
     </div>
 
-    <script>window.BUILD_SHA = "25e4c1b";</script>
-    <script src="js/pyodide-loader.js?v=25e4c1b"></script>
-    <script src="js/app.js?v=25e4c1b"></script>
+    <script>window.BUILD_SHA = "9f78c2e";</script>
+    <script src="js/pyodide-loader.js?v=9f78c2e"></script>
+    <script src="js/app.js?v=9f78c2e"></script>
 </body>
 </html>
