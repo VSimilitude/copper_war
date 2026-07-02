@@ -255,7 +255,7 @@ function onStateInput() {
 
 function renderStateSummary(container, result) {
     let html = "<details><summary><h3>Alliances</h3></summary><table><tr>";
-    html += "<th>ID</th><th>Faction</th><th>Power</th><th>Starting Copper</th><th>Daily Rate</th>";
+    html += "<th>ID</th><th>Faction</th><th>Power</th><th>Starting Copper</th><th>Rate (/hr)</th>";
     html += "</tr>";
     for (const a of result.alliances) {
         html += `<tr>
@@ -263,7 +263,7 @@ function renderStateSummary(container, result) {
             <td>${esc(a.faction)}</td>
             <td>${a.power}</td>
             <td>${a.starting_copper.toLocaleString()}</td>
-            <td>${a.daily_rate.toLocaleString()}</td>
+            <td>${a.hourly_rate.toLocaleString()}</td>
         </tr>`;
     }
     html += "</table></details>";
