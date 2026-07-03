@@ -371,6 +371,7 @@ function buildGeneralSettings() {
     const targTemp = modelFormData.targeting_temperature ?? "";
     const powerNoise = modelFormData.power_noise ?? "";
     const outcomeNoise = modelFormData.outcome_noise ?? "";
+    const rateNoise = modelFormData.production_rate_noise ?? "";
     const topN = modelFormData.tier_optimization_top_n ?? _tierOptsStash.top_n;
     const fallback = modelFormData.tier_optimization_fallback ?? _tierOptsStash.fallback;
     const showTierOpts = strategy === "maximize_tier";
@@ -412,7 +413,7 @@ function buildGeneralSettings() {
                     </select>
                 </label>
             </div>
-            <div class="help-text noise-note">These three settings only affect
+            <div class="help-text noise-note">These four settings only affect
                 <strong>Monte Carlo</strong> runs. Set all to 0 for fully
                 deterministic results.</div>
             <label>Targeting Temperature
@@ -432,6 +433,15 @@ function buildGeneralSettings() {
                 <input type="number" id="form-outcome-noise" value="${outcomeNoise}"
                        placeholder="0" min="0" step="0.05"
                        data-field="outcome_noise">
+            </label>
+            <label>Production Rate Noise
+                <span class="help-text">Per-run land/production churn intensity (0–1).
+                    Each run reshuffles cities between alliances and the unowned pool,
+                    so sampled rates always stay within real per-server land limits
+                    (≤ 3400/hr per alliance) — no impossible configurations.</span>
+                <input type="number" id="form-rate-noise" value="${rateNoise}"
+                       placeholder="0" min="0" max="1" step="0.05"
+                       data-field="production_rate_noise">
             </label>
         </div>
     </details>`;
@@ -1236,6 +1246,7 @@ function collectFormData() {
         ["form-targeting-temp", "targeting_temperature"],
         ["form-power-noise", "power_noise"],
         ["form-outcome-noise", "outcome_noise"],
+        ["form-rate-noise", "production_rate_noise"],
     ]) {
         const val = document.getElementById(id)?.value;
         if (val !== "" && val != null) {
